@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Container, Typography, Grid, Paper, Card, CardHeader, CardContent, Button, useMediaQuery } from '@mui/material';
+import { Box, Typography, Grid, Paper, Card, CardHeader, CardContent, Button, useMediaQuery } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useConfirm } from 'material-ui-confirm';
-import Swal from 'sweetalert2';
-import { removeUser } from '../services/token';
-import { useSnackbar } from 'notistack';
 import WrapperComponent from './wrapperComponent';
 import Chart from 'react-apexcharts';
 import { Circle, CurrencyRupee } from '@mui/icons-material';
 import { Colors } from '../services/colors';
-import Calendar from './MyDatePicker';
 import { transactionSelector } from '../redux/transaction/transactionSlice';
 import { getAllTransactionAction } from '../redux/transaction/middleware';
 import { formatDate, transactionTypeColor } from '../utils/utils';
@@ -22,7 +17,6 @@ function Dashboard() {
   const isMobile = useMediaQuery('(max-width:600px)');
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const confirm = useConfirm();
   const { reportsData } = useSelector(reportsSelector);
   const [chartSeries, setChartSeries] = useState([]);
   console.log("reportsData", reportsData);
@@ -38,7 +32,7 @@ function Dashboard() {
         show: false,
       },
       background: '#333',
-      width:350,
+      width: 350,
       dropShadow: {
         enabled: true,
         top: 18,
@@ -56,23 +50,23 @@ function Dashboard() {
       position: 'top',
       horizontalAlign: 'left',
       // offsetX: 40,
-      
+
       labels: {
         colors: '#fff',
       },
     },
   };
 
-  
+
   // const series = [44, 55, 57];
   useEffect(() => {
     dispatch(getAllTransactionAction())
   }, [])
   useEffect(() => {
     if (reportsData) {
-      setChartSeries([reportsData.summary?.totalIncome, reportsData.summary?.totalExpenses, reportsData.summary?.balance]);
+      setChartSeries([reportsData?.summary?.totalIncome, reportsData.summary?.totalExpenses, reportsData.summary?.balance]);
     }
-  },[reportsData])
+  }, [reportsData])
   return (
     <WrapperComponent>
       {/* <Calendar/> */}
@@ -90,7 +84,7 @@ function Dashboard() {
 
         {transactionData ?
           <>
-            {transactionData &&
+            {/* {transactionData &&
               <Grid item xs={12} md={6} lg={5} bgcolor={Colors.primary} >
                 <Paper
                   sx={{
@@ -100,7 +94,7 @@ function Dashboard() {
                   <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 350} />
                 </Paper>
               </Grid>
-            }
+            } */}
             <Grid item xs={12} md={6} lg={7} bgcolor={Colors.primary}>
               <Box
                 sx={{
@@ -133,7 +127,7 @@ function Dashboard() {
                             marginRight: '10px',
                           }}
                         /> */}
-                            <Circle sx={{ color:item?.type === 'credit' ? 'green' : 'red', mr: 1 }} fontSize='10px' />
+                            <Circle sx={{ color: item?.type === 'credit' ? 'green' : 'red', mr: 1 }} fontSize='10px' />
                             <Typography variant='body2' sx={{ flexGrow: 1 }} >{item?.type}<span style={{ float: 'right', display: 'flex', alignItems: 'center', color: transactionTypeColor(item?.type) }}> <CurrencyRupee /> {item.amount}</span></Typography>
                           </CardContent>
                         </Card>
