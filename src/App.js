@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
@@ -10,9 +10,10 @@ import Reports from './components/Reports';
 import Settings from './components/Settings';
 import './App.css';
 import { useSelector } from 'react-redux';
+import { authSelector } from './redux/auth/authSlice';
 
 function App() {
-  const { currentUser } = useSelector((state) => state.Auth)
+  const { currentUser } = useSelector(authSelector);
 
   return (
     <Router>

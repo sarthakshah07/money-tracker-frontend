@@ -7,7 +7,6 @@ import { addTransactionAsync, deleteTransactionAsync, getAllOwnedCategoriesAsync
 export const getAllOwnedCategoriesAction = createAsyncThunk(
   "transaction/getAllOwnedCategoriesAction",
   async (_, { rejectWithValue, dispatch }) => {
-    let userData;
     try {
       const response = await getAllOwnedCategoriesAsync();
       return response;
