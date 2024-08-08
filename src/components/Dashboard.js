@@ -90,7 +90,7 @@ function Dashboard() {
 
         {transactionData ?
           <>
-            {transactionData &&
+            {/* {transactionData &&
               <Grid item xs={12} md={6} lg={5} bgcolor={Colors.primary} >
                 <Paper
                   sx={{
@@ -100,7 +100,7 @@ function Dashboard() {
                   <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 350} />
                 </Paper>
               </Grid>
-            }
+            } */}
             <Grid item xs={12} md={6} lg={7} bgcolor={Colors.primary}>
               <Box
                 sx={{
