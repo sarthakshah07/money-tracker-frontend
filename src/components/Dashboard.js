@@ -67,6 +67,10 @@ function Dashboard() {
       setChartSeries([reportsData?.summary?.totalIncome, reportsData.summary?.totalExpenses, reportsData.summary?.balance]);
     }
   }, [reportsData])
+
+  if (!transactionData && !reportsData) {
+    return <div>Loading...</div>;
+  }
   return (
     <WrapperComponent>
       {/* <Calendar/> */}
@@ -84,17 +88,17 @@ function Dashboard() {
 
         {transactionData ?
           <>
-            {/* {transactionData &&
+            {(transactionData.length > 0 && chartSeries && chartSeries.length > 0) &&
               <Grid item xs={12} md={6} lg={5} bgcolor={Colors.primary} >
                 <Paper
                   sx={{
                     padding: '20px',
                   }}
                 >
-                  <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 350} />
+                 {/* {chartSeries && <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 350} /> } */}
                 </Paper>
               </Grid>
-            } */}
+            }
             <Grid item xs={12} md={6} lg={7} bgcolor={Colors.primary}>
               <Box
                 sx={{
