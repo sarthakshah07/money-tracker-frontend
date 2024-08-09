@@ -13,8 +13,8 @@ import AuthModule from '../pages/authModule';
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 function Login() {
-  const [email, setEmail] = useState('shah770@gmail.com');
-  const [password, setPassword] = useState('Admin@123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
@@ -127,7 +127,8 @@ function Login() {
             <FormControl sx={{ m: 1 }} fullWidth variant="filled">
               <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
               <FilledInput
-
+                onChange={(e) => setPassword(e.target.value)}
+                value={password}
                 id="filled-adornment-password"
                 type={isPasswordVisible ? 'text' : 'password'}
                 sx={{ "& .MuiInputBase-input.MuiFilledInput-input:-webkit-autofill": { boxShadow: "0 0 0 100px rgba(23, 20, 20, .98) inset" } }}

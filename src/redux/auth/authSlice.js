@@ -24,6 +24,13 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(loginUserByEmailAction.fulfilled, (state, { payload }) => {
       console.log("payload slice", payload, state.currentUser);
+      if (payload.message) {
+        return (
+          {
+            ...state,
+            currentUser: null,
+          })
+      }
       setUser(payload.data)
 
       return (
@@ -31,6 +38,16 @@ const authSlice = createSlice({
           ...state,
           currentUser: payload.data,
           userCategories: payload.data.user.categories || state.currentUser?.user?.categories
+        })
+    });
+    builder.addCase(loginUserByEmailAction.rejected, (state, { payload }) => {
+      console.log("payload slice rtejected", payload);
+    
+
+      return (
+        {
+          ...state,
+          currentUser: null,
         })
     });
     builder.addCase(logoutUserAction.fulfilled, (state, { payload }) => ({

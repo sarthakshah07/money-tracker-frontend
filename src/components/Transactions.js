@@ -192,7 +192,7 @@ function Transactions() {
                 size='small'
 
                 sx={{
-                  width: '15%',
+                  minWidth: '100px',
                   color: Colors.fillers
                 }}
               >
@@ -204,7 +204,7 @@ function Transactions() {
                   onChange={(e) => setIsFilter(e.target.value)}
                   sx={{
                     color: Colors.fillers,
-
+                   
                     "& .MuiSelect-icon": {
                       color: Colors.fillers
                     }
@@ -221,7 +221,11 @@ function Transactions() {
             {transactions?.length > 0 ? (
               // <Grid container >{
               //   isBigScreen ?
-              <TableContainer sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: { xs: "min-content", md: "100%" } }}>
+              <TableContainer 
+               
+              // sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column',
+              //  width: { xs: "min-content", md: "100%" } }}
+               >
                 {isLoading ? <FallingLines
                   color="#4fa94d"
                   width="100"
@@ -229,7 +233,7 @@ function Transactions() {
                   ariaLabel="falling-circles-loading"
                 /> :
                   <>
-                    <Table >
+                    <Table size='small' >
                       <TableHead>
                         <TableRow>
                           <TableCell align='left'></TableCell>

@@ -5,7 +5,7 @@ const axiosInstance = axios.create({
   // baseURL: "https://reqres.in",
   // baseURL:"http://192.168.0.194:6000",
   // baseURL : "http://localhost:8000/api",
-  baseURL:"https://money-tracker-backend-z23g.onrender.com/api",
+  baseURL: "https://money-tracker-backend-z23g.onrender.com/api",
   // headers: {
   //   "Content-Type": "application/json",
   // }
@@ -28,6 +28,15 @@ axiosInstance.interceptors.request.use(config => {
   return config;
 });
 
+export const isAxiosError = (err) => {
+  if (axios.isAxiosError(err)) {
+    if (err.response && err.response.data) {
+      return err.response.data;
+    }
+    return { code: err.code, message: err.message };
+  }
+  return { code: err.code, message: err.message };
+};
 // const instance: AxiosInstance = axios.create({
 //   baseURL: config.apiURL,
 //   timeout: 1000 * 50,

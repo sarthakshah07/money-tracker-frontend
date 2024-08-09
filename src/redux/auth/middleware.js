@@ -21,9 +21,12 @@ export const loginUserByEmailAction = createAsyncThunk(
     let userData;
     try {
       const response = await loginWithEmailAsync(request);
+      
       return response;
       
     } catch (error) {
+      console.log("error", error);
+      
       dispatch(hideLoader());
       return rejectWithValue(error);
     }

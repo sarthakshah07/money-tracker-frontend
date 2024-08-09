@@ -1,4 +1,4 @@
-import axiosInstance from "../../services/api";
+import axiosInstance, { isAxiosError } from "../../services/api";
 
 // login apis url
 //  const LoginUserUrl = "/api/login";
@@ -12,7 +12,8 @@ export const loginWithEmailAsync = async (request) => {
     const response = await axiosInstance.post(LoginUserUrl, request);
     return response;
   } catch (err) {
-    return err;
+    
+    return isAxiosError(err) ;
   }
 };
 

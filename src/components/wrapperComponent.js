@@ -7,9 +7,9 @@ import { Colors } from '../services/colors';
 const WrapperComponent = ({ children }) => {
   const isMobile = useMediaQuery('(max-width:600px)')
   return (
-    <Box sx={{ height: "100dvh", position: "fixed", width:"100dvw" }} >
-      {isMobile && <Navbar />}
-      <Grid container spacing={0} height={"100%"} bgcolor={Colors.primary}  >
+    // <Box sx={{ height: "100dvh",width:"100dvw" }} >
+    <Grid container  height={"100dvh"}  bgcolor={Colors.primary}  >
+        {isMobile && <Navbar />}
         {!isMobile &&
           <Grid item xs={2} sm={4} md={2} sx={{ borderRight: `1px solid ${Colors.fillers}` }} >
             <SideBar />
@@ -19,7 +19,7 @@ const WrapperComponent = ({ children }) => {
           {children}
         </Grid>
       </Grid>
-    </Box>
+    // </Box>
 
   );
 };
