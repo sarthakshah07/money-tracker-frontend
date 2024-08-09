@@ -86,7 +86,7 @@ function AddTransaction({ modalOpen, setModalOpen }) {
     <Modal open={modalOpen} onClose={handleModalClose}>
       <Box sx={{ display: 'flex', flexDirection: 'column', color: "black", background: Colors.primary, alignItems: 'center', p: '20px', boxShadow: `10px 10px 30px ${Colors.fillers}` }}>
         <Typography variant='h6' sx={{ mb: '10px', color: Colors.text }}>Add Transaction</Typography>
-        <Box sx={{ borderRadius: 5, boxShadow: 10, p: 2, width: "40%" }}>
+        <Box sx={{ borderRadius: 5, boxShadow: 10, p: 2, width: {xs:"80%", md: "40%"} }}>
           <form onSubmit={handleSubmit}>
             <Grid container>
               <Grid item xs={12}>
