@@ -61,7 +61,7 @@ function Signup() {
         setUser(data);
         setIsLoading(false);
         enqueueSnackbar('Signed up successfully', { variant: 'success' });
-      
+
       }
       else {
         setIsLoading(false);
@@ -159,21 +159,7 @@ function Signup() {
                 Already have an account?
               </Typography>
               <MyButton title="Login" variant="text" onClick={() => navigate('/login')} />
-              <Button
-                variant="text"
-                sx={{
-                  backgroundColor: 'transparent',
-                  color: 'white',
-                  '&:hover': {
-                    backgroundColor: 'transparent',
-                    color: `${Colors.fillers}`,
-                    // border: `1px solid ${Colors.fillers}`,
-                  },
-                }}
-                onClick={() => navigate('/login')}
-              >
-                Login
-              </Button>
+
             </Box>
 
           </Stack>
