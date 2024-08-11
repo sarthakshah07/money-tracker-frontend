@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Divider, Grid, IconButton, List, ListItem, ListItemIcon, ListItemText, Toolbar, Tooltip, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { AddCircleOutline, BarChartOutlined, CancelOutlined, CancelPresentationRounded, CancelPresentationSharp, CancelSharp, DashboardCustomizeOutlined, Logout, SettingsAccessibility, TrendingUpOutlined } from '@mui/icons-material';
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUser, removeUser } from "../services/token";
@@ -63,15 +63,19 @@ const SideBar = ({ setOpen }) => {
       <Grid item xs={12} sx={{ margin: "0 auto", color: "white" }}>
         <List>
           {sidebarItems?.map((item) => (
-            <ListItem button key={item.title} sx={{color:pathname===item.title.toLowerCase() ? Colors.fillers : "white",
-            //  borderBottom: pathname === item.title.toLowerCase() ? `1px solid ${Colors.fillers}` : "none"
-            }} 
-             onClick={() => handleNavigate(item.path)} className="listItem">
-              <ListItemIcon className="listIcon" sx={{color:pathname===item.title.toLowerCase() ? Colors.fillers : "white"}}>
-                {item.icon}
-              </ListItemIcon>
-              <ListItemText primary={item.title} />
-            </ListItem>
+            <Tooltip key={item.title} title={item.disabled ? "Coming Soon" : ""} placement="top" arrow>
+                 <ListItem key={item.title} disabled={item.disabled} sx={{
+                color: pathname === item.title.toLowerCase() ? Colors.fillers : "white",
+                //  borderBottom: pathname === item.title.toLowerCase() ? `1px solid ${Colors.fillers}` : "none"
+                cursor: item.disabled ? "not-allowed" : "pointer"
+              }}
+                onClick={() => handleNavigate(item.path)} className="listItem">
+                <ListItemIcon className="listIcon" sx={{ color: pathname === item.title.toLowerCase() ? Colors.fillers : "white" }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText primary={item.title} />
+              </ListItem>
+            </Tooltip>
           ))}
           <ListItem button onClick={handleLogout} className="listItem" sx={{ borderBlockStart: `1px solid ${Colors.secondary}` }}>
             <ListItemIcon className="listIcon">

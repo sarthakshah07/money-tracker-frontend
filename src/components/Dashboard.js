@@ -11,6 +11,8 @@ import { getAllTransactionAction } from '../redux/transaction/middleware';
 import { formatDate, transactionTypeColor } from '../utils/utils';
 import { getAllReportsAction } from '../redux/reports/middleware';
 import { reportsSelector } from '../redux/reports/reportsSlice';
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 
 function Dashboard() {
   const { transactionData } = useSelector(transactionSelector)
@@ -18,11 +20,33 @@ function Dashboard() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { reportsData } = useSelector(reportsSelector);
-  const [chartSeries, setChartSeries] = useState([]);
-  console.log("reportsData", reportsData);
+  const [chartSeries, setChartSeries] = useState([0, 0, 0]);
   useEffect(() => {
     dispatch(getAllReportsAction());
   }, []);
+  useGSAP(() => {
+    gsap.fromTo(
+      ".Dashboard",
+      {
+        opacity: 0,
+        x: 100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        // ease: "power4.out"
+      }
+    );
+
+    return () => {
+      gsap.to(".Dashboard", {
+        opacity: 0,
+        x: -100,
+        duration: 1
+      });
+    };
+  });
   const options = {
     chart: {
       type: 'polarArea',
@@ -63,7 +87,9 @@ function Dashboard() {
     dispatch(getAllTransactionAction())
   }, [])
   useEffect(() => {
-    if (reportsData) {
+    if (reportsData?.summary?.totalIncome && reportsData?.summary?.totalExpenses && reportsData?.summary?.balance) {
+      console.log("reportsData", typeof reportsData.summary?.totalIncome, reportsData.summary?.totalIncome, typeof reportsData.summary?.totalExpenses, reportsData.summary?.totalExpenses, typeof reportsData.summary?.balance, reportsData.summary?.balance);
+
       setChartSeries([reportsData?.summary?.totalIncome, reportsData.summary?.totalExpenses, reportsData.summary?.balance]);
     }
   }, [reportsData])
@@ -78,6 +104,7 @@ function Dashboard() {
 
       <Grid container spacing={1} p={isMobile ? 1 : 5} mb={isMobile ? 10 : "auto"}
       // sx={{height: "fit-content" }}
+     
       >
         <Grid item xs={12} bgcolor={Colors.primary}>
           <Typography variant='h4' sx={{ color: '#fff', marginBottom: '20px' }}>
@@ -89,14 +116,14 @@ function Dashboard() {
         {transactionData ?
           <>
             {(transactionData.length > 0 && chartSeries && chartSeries.length > 0) &&
-              <Grid item xs={12} md={6} lg={5} bgcolor={Colors.primary} >
-                <Paper
+              <Grid item xs={12} md={6} lg={5} bgcolor={Colors.primary}  className='Dashboard' display="flex" justifyContent="center" alignItems="center">
+                {/* <Paper
                   sx={{
-                    padding: '20px',
+                    // padding: '20px',
                   }}
-                >
-                 {/* {chartSeries && <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 350} /> } */}
-                </Paper>
+                > */}
+                {chartSeries && <Chart options={options} series={chartSeries} type="polarArea" width={isMobile ? "100%" : 350} height={isMobile ? 250 : 400} />}
+                {/* </Paper> */}
               </Grid>
             }
             <Grid item xs={12} md={6} lg={7} bgcolor={Colors.primary}>
@@ -108,15 +135,16 @@ function Dashboard() {
                   // height: '100%',
                   // padding: '20px',
                   // background: '#444',
+                  p:2,
                   color: '#fff',
                 }}
               >
                 {transactionData && <Typography variant='h5'>Recent Transactions</Typography>}
-                <Grid container spacing={2} >
+                <Grid container spacing={2}   >
                   {transactionData?.length > 0 ? <>
                     {transactionData?.slice(0, 6)?.map((item, index) => (
                       <Grid item xs={6}>
-                        <Card>
+                        <Card className='Dashboard'>
                           <CardHeader
 
                             subheader={formatDate(item.date)}
@@ -132,7 +160,7 @@ function Dashboard() {
                           }}
                         /> */}
                             <Circle sx={{ color: item?.type === 'credit' ? 'green' : 'red', mr: 1 }} fontSize='10px' />
-                            <Typography variant='body2' sx={{ flexGrow: 1 }} >{item?.type}<span style={{ float: 'right', display: 'flex', alignItems: 'center', color: transactionTypeColor(item?.type) }}> <CurrencyRupee /> {item.amount}</span></Typography>
+                            <Typography variant='body2' sx={{ flexGrow: 1, textTransform: 'capitalize' }} >{item?.type}<span style={{ float: 'right', display: 'flex', alignItems: 'center', color: transactionTypeColor(item?.type) }}> <CurrencyRupee /> {item.amount}</span></Typography>
                           </CardContent>
                         </Card>
                       </Grid>

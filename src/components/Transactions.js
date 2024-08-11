@@ -15,6 +15,9 @@ import { formatDate, transactionTypeColor } from '../utils/utils';
 import TransactionCard from './TransactionCard';
 import Swal from 'sweetalert2';
 import { FallingLines } from "react-loader-spinner"
+import MyDateInput from './MyDateInput';
+import { useGSAP } from '@gsap/react';
+import gsap from "gsap";
 
 function Transactions() {
   const isBigScreen = useMediaQuery("(min-width: 1200px)");
@@ -56,7 +59,30 @@ function Transactions() {
       return { month, year };
     }))
   ];
-  console.log("months datsa", monthsData);
+
+  useGSAP(() => {
+    gsap.fromTo(
+      ".transactionContainer",
+      {
+        opacity: 0,
+        x: 100
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 1,
+        // ease: "power4.out"
+      }
+    );
+
+    return () => {
+      gsap.to(".transactionContainer", {
+        opacity: 0,
+        x: -100,
+        duration: 1
+      });
+    };
+  });
   // const monthsData = Array.from({ length: 12 - currentMonth }, (_, i) => {
   //   const month = new Date(currentYear, currentMonth + i + 1, 1)
   //     .toLocaleString('default', { month: 'short' });
@@ -90,7 +116,6 @@ function Transactions() {
       }
     })
   }
-  console.log("transactionData", transactionData);
   const handleEditRow = (e) => {
     e.preventDefault();
     const updatedTransactions = transactions?.find((transaction) => transaction._id === isRowEditable._id);
@@ -138,7 +163,7 @@ function Transactions() {
       setIsLoading(false)
     }, 1500)
   }
-    , [dispatch, transactionData])
+    , [])
   return (
     <WrapperComponent>
       <Container sx={{ padding: '20px' }}>
@@ -148,6 +173,7 @@ function Transactions() {
         <Grid container spacing={1} bgcolor={Colors.primary} p={2} sx={{ maxHeight: '90dvh', overflowY: "auto" }}>
 
           <Grid item xs={12}
+          className='transactionContainer'
             sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -161,77 +187,74 @@ function Transactions() {
             <Box
               display={"flex"}
               justifyContent={"space-between"}
+              flexDirection={isBigScreen ? "row" : "column"}
+              gap={isBigScreen ? "10px" : "10px"}
             >
               <Typography variant='h5'>Recent Transactions</Typography>
-
-              <MyButton
-                startIcon={
-                  <Add />
-                }
-                variant='outlined'
-                title="Add New"
-                sx={{
-                  color: Colors.fillers,
-                  borderColor: Colors.fillers
-                }}
-                onClick={() => setModalOpen(true)}
-              />
-
-
-
-            </Box>
-            <Box
-              display={"flex"}
-              justifyContent={"flex-end"}
-              sx={{
-                marginTop: '10px'
-              }}
-            >
-              <FormControl
-                variant="outlined"
-                size='small'
-
-                sx={{
-                  minWidth: '100px',
-                  color: Colors.fillers
-                }}
-              >
-                <InputLabel id="demo-simple-select-label">Filter</InputLabel>
-                <Select
-                  value={filter}
-                  label="Filter"
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: '10px' }}>
+                <FormControl
+                  variant="outlined"
                   size='small'
-                  onChange={(e) => setIsFilter(e.target.value)}
+
                   sx={{
-                    color: Colors.fillers,
-                   
-                    "& .MuiSelect-icon": {
-                      color: Colors.fillers
-                    }
+                    minWidth: '100px',
+                    color: Colors.fillers
                   }}
                 >
-                  {monthsData.map((month, index) =>
-                    <MenuItem key={index} value={month.month} >{month.month} - {month.year}</MenuItem>)}
-                  {/* <MenuItem value="all">All</MenuItem>
+                  <InputLabel id="demo-simple-select-label">Filter</InputLabel>
+                  <Select
+                    value={filter}
+                    label="Filter"
+                    size='small'
+                    onChange={(e) => setIsFilter(e.target.value)}
+                    sx={{
+                      color: Colors.fillers,
+
+                      "& .MuiSelect-icon": {
+                        color: Colors.fillers
+                      }
+                    }}
+                  >
+                    {monthsData.map((month, index) =>
+                      <MenuItem key={index} value={month.month} >{month.month} {month.year && `, ${month.year}`}</MenuItem>)}
+                    {/* <MenuItem value="all">All</MenuItem>
                     <MenuItem value="income">Income</MenuItem>
                     <MenuItem value="expense">Expense</MenuItem> */}
-                </Select>
-              </FormControl>
+                  </Select>
+                </FormControl>
+                <MyButton
+                  startIcon={
+                    <Add />
+                  }
+                  variant='outlined'
+                  title="Add New"
+                  sx={{
+                    color: Colors.fillers,
+                    borderColor: Colors.fillers
+                  }}
+                  onClick={() => setModalOpen(true)}
+                />
+              </Box>
+
+
+
+
             </Box>
+
             {transactions?.length > 0 ? (
               // <Grid container >{
               //   isBigScreen ?
-              <TableContainer 
-               
+              <TableContainer
+
               // sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column',
               //  width: { xs: "min-content", md: "100%" } }}
-               >
-                {isLoading ? <FallingLines
+              >
+                {isLoading ? <Grid container justifyContent={"center"}><FallingLines
                   color="#4fa94d"
                   width="100"
                   visible={true}
                   ariaLabel="falling-circles-loading"
-                /> :
+                /> </Grid>:
                   <>
                     <Table size='small' >
                       <TableHead>
@@ -250,18 +273,24 @@ function Transactions() {
                             <TableCell align='center' sx={{ minWidth: '5px', maxWidth: '5px' }}><CircleRounded fontSize='20px' sx={{ color: transactionTypeColor(transaction?.type) }} /></TableCell>
                             <TableCell>
                               {Boolean(isRowEditable) && isRowEditable._id === transaction._id ?
-                              <MyEditableTextField
-                                type="date"
-                                value={new Date(transaction.date).toDateString()}
-                                flag={Boolean(isRowEditable) && isRowEditable._id === transaction._id}
-                                onChange={(e) => {
-                                  const updatedTransactions = [...transactions];
-                                  updatedTransactions[index] = { ...updatedTransactions[index], date: e.target.value };
-                                  setTransactions(updatedTransactions);
-                                }}
-                                defaultValue={formatDate(transaction.date)}
-                              />
-                              :<Typography variant='body2' >{formatDate(transaction.date)}</Typography>}
+                                <MyDateInput value={transaction.date}
+                                  onChange={(date) => {
+                                    const updatedTransactions = [...transactions];
+                                    updatedTransactions[index] = { ...updatedTransactions[index], date: date };
+                                    setTransactions(updatedTransactions);
+                                  }} />
+                                // <MyEditableTextField
+                                //   type="date"
+                                //   value={new Date(transaction.date).toDateString()}
+                                //   flag={Boolean(isRowEditable) && isRowEditable._id === transaction._id}
+                                //   onChange={(e) => {
+                                //     const updatedTransactions = [...transactions];
+                                //     updatedTransactions[index] = { ...updatedTransactions[index], date: e.target.value };
+                                //     setTransactions(updatedTransactions);
+                                //   }}
+                                //   defaultValue={formatDate(transaction.date)}
+                                // />
+                                : <Typography variant='body2' >{formatDate(transaction.date)}</Typography>}
                             </TableCell>
                             <TableCell >
 

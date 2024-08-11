@@ -84,11 +84,11 @@ function AddTransaction({ modalOpen, setModalOpen }) {
   return (
 
     <Modal open={modalOpen} onClose={handleModalClose}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', color: "black", background: Colors.primary, alignItems: 'center', p: '20px', boxShadow: `10px 10px 30px ${Colors.fillers}` }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', color: "black", background: Colors.primary, alignItems: 'center', p: '20px', boxShadow: `10px 1px 30px ${Colors.fillers}` }}>
         <Typography variant='h6' sx={{ mb: '10px', color: Colors.text }}>Add Transaction</Typography>
         <Box sx={{ borderRadius: 5, boxShadow: 10, p: 2, width: {xs:"80%", md: "40%"} }}>
           <form onSubmit={handleSubmit}>
-            <Grid container>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -102,12 +102,12 @@ function AddTransaction({ modalOpen, setModalOpen }) {
 
                   inputProps={{ max: new Date().toISOString().split('T')[0] }}
                   onChange={(e) => setDate(e.target.value)}
-                  sx={{ mb: '10px', color: Colors.text, borderColor: Colors.text }}
+                  sx={{  color: Colors.text, borderColor: Colors.text }}
                 />
 
               </Grid>
               <Grid item xs={12} md={6}>
-                <RadioGroup value={type} onChange={(e) => setType(e.target.value)} inline sx={{ display: "block", justifyContent: "space-evenly", color: Colors.text, marginBottom: 1 }}>
+                <RadioGroup value={type} onChange={(e) => setType(e.target.value)} inline sx={{ display: "block", justifyContent: "space-evenly", color: Colors.text, }}>
                   <FormControlLabel value="credit" sx={{ color: Colors.text }} required control={<Radio sx={{ color: Colors.text }} />} label="Credit" />
                   <FormControlLabel value="debit" sx={{ color: Colors.text }} required control={<Radio sx={{ color: Colors.text }} />} label="Debit" />
                 </RadioGroup>
@@ -121,7 +121,7 @@ function AddTransaction({ modalOpen, setModalOpen }) {
                     value={category}
                     label="Category"
                     onChange={(e) => setCategory(e.target.value)}
-                    sx={{ mb: '10px', color: Colors.text, borderColor: Colors.text }}
+                    sx={{ color: Colors.text, borderColor: Colors.text }}
                   >
                     {currentUser.user.categories?.map((item, index) => {
                       if (index === 0) return null 
@@ -134,14 +134,14 @@ function AddTransaction({ modalOpen, setModalOpen }) {
                 </FormControl>
               </Grid>
               <Grid item xs={12}>
-                <TextField label="Amount" required size='small' value={amount} disabled={!type} fullWidth onChange={(e) => setAmount(!isNaN(e.target.value) ? e.target.value : amount)} sx={{ mb: '20px', borderColor: Colors.text }}
+                <TextField label="Amount" required size='small' value={amount} disabled={!type} fullWidth onChange={(e) => setAmount(!isNaN(e.target.value) ? e.target.value : amount)} sx={{borderColor: Colors.text }}
                   InputProps={{ startAdornment: <InputAdornment position="start"><CurrencyRupee sx={{ color: Colors.text }} /></InputAdornment>, style: { color: type === "credit" ? "green" : "red" } }}
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField label="Details " size='small' fullWidth multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} sx={{ mb: '20px', color: "black", borderColor: "black" }} inputProps={{ color: "black" }} />
+                <TextField label="Details " size='small' fullWidth multiline rows={4} value={description} onChange={(e) => setDescription(e.target.value)} sx={{  color: "black", borderColor: "black" }} inputProps={{ color: "black" }} />
               </Grid>
-              <Grid item xs={12} display={"flex"} >
+              <Grid item xs={12} display={"flex"} justifyContent={"flex-end"} >
                 <MyButton
                   startIcon={
                     <Save />
