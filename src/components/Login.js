@@ -56,6 +56,7 @@ function Login() {
           setUser(data);
           setIsLoading(false);
           enqueueSnackbar('Logged in successfully', { variant: 'success' });
+          navigate('/');
         }
         else {
           setIsLoading(false);
@@ -64,7 +65,6 @@ function Login() {
 
         // setTimeout(() => {
 
-        navigate('/');
         // },[1500]);
 
       }).catch((error) => {
